@@ -28,3 +28,6 @@ Files:
 
 ## Evaluation
 Evaluasi submission diberikan dengan format .csv yang memiliki header nama kolom (lihat contoh submisi). Hasil submisi akan dinilai dengan metrik MCC (Matthews Correlation Coefficient). Sebagian hasil penilaian test dataset akan digunakan untuk membentuk public leaderboard. Hasil utuh akan diberikan pada private leaderboard setelah kompetisi berakhir.
+
+# Competition Link
+https://www.kaggle.com/competitions/gammafest25
