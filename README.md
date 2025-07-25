@@ -2,32 +2,32 @@
 GammaFest 2025 challenges participants to build a machine learning model that predicts citation links between scientific papers. Using full texts, metadata, and topic labels, the goal is to help the Elbaf Library recommend relevant research. Models are evaluated using the Matthews Correlation Coefficient (MCC).
 
 # Competition Overview
-## Latar Belakang
-Selama berabad-abad, Perpustakaan Elbaf telah menjadi penjaga pengetahuan dunia. Dari pengetahuan kuno hingga modern, semua tercatat dalam ribuan paper yang tersimpan dengan rapi. Perpustakaan ini dijaga oleh Biblo, satu-satunya penjaga yang setia memastikan bahwa pengetahuan tetap tersedia bagi mereka yang membutuhkannya. Namun, seiring berjalannya waktu, sistem manajemen referensi di perpustakaan mulai menunjukkan berbagai kelemahan, yang menghambat akses terhadap pengetahuan yang telah dikumpulkan selama ini.
+## Background
+For centuries, the Elbaf Library has served as the guardian of the world's knowledge. From ancient wisdom to modern science, everything is meticulously recorded in thousands of papers stored within its walls. The library is watched over by Biblo, a faithful guardian who ensures that knowledge remains accessible to those in need. However, as time has passed, the library’s reference management system has begun to show various weaknesses, hindering access to the vast knowledge it holds.
 
-Kini, sekelompok Ksatria Suci yang berambisi untuk mendokumentasikan perjalanan intelektual mereka dalam bentuk paper ilmiah datang ke Perpustakaan Elbaf. Mereka ingin menulis paper yang akan menjadi warisan bagi generasi mendatang, tetapi mereka menghadapi satu masalah besar—Bagaimana mereka bisa menemukan referensi yang tepat untuk mendukung penelitian mereka? Mereka meminta bantuan Biblo, tetapi Biblo tidak memiliki kekuatan untuk membantu para Ksatria Suci dalam menemukan, merekomendasikan, atau menghubungkan paper-paper yang relevan.
+Now, a group of Holy Knights has arrived, seeking to document their intellectual journeys in the form of scientific papers. They hope to write works that will become a legacy for future generations, but they face a major challenge—how can they find the right references to support their research? They turn to Biblo for help, but Biblo no longer has the strength to assist the Holy Knights in finding, recommending, or connecting relevant papers.
 
 ## Problem
-Sistem rekomendasi paper yang ada saat ini belum cukup efektif dalam memberikan saran literatur yang relevan bagi para Ksatria Suci. Perpustakaan Elbaf membutuhkan sistem yang dapat membantu mengelola dan menyajikan referensi yang sesuai dengan kebutuhan penelitian. Selain itu, hubungan antar-paper masih sulit dipetakan dengan akurat, menyebabkan referensi yang relevan sering kali terlewatkan.
+The current paper recommendation systems are not effective enough in providing relevant literature suggestions for the Holy Knights. The Elbaf Library needs a system that can help manage and present appropriate references for various research needs. Moreover, mapping relationships between papers remains a complex task, resulting in important references often being overlooked.
 
-Para Ksatria Suci dalam kompetisi ini diminta untuk membangun model pembelajaran mesin yang dapat mengatasi tantangan tersebut. Model ini harus mampu memprediksi hubungan kutipan antar-paper. Persoalan utama yang dihadapi adalah bagaimana membantu Perpustakaan Elbaf dalam membangun sistem rekomendasi referensi paper yang optimal.
+Participants in this competition are asked to build a machine learning model to solve this challenge. The model should be able to predict citation relationships between papers. The core issue is to help the Elbaf Library build an optimal reference recommendation system.
 
-Untuk mengevaluasi model yang dikembangkan, akan digunakan metrik evaluasi MCC (Matthews Correlation Coefficient).
+To evaluate the models, the Matthews Correlation Coefficient (MCC) will be used as the evaluation metric.
 
-## Deskripsi Dataset
-Dataset ini terdiri dari pasangan dokumen ilmiah, masing-masing dilengkapi dengan metadata seperti judul, abstrak, dan tahun publikasi. Setiap baris data merepresentasikan kemungkinan bahwa dokumen pertama (paper) mengutip dokumen kedua (referenced_paper).
+## Dataset Description
+The dataset consists of pairs of scientific documents, each equipped with metadata such as titles, abstracts, and publication years. Each row in the dataset represents the possibility that the first document (paper) cites the second document (referenced_paper).
 
-Tugas peserta adalah membangun model pembelajaran mesin untuk memprediksi nilai is_referenced, yaitu apakah hubungan kutipan tersebut benar-benar terjadi, berdasarkan informasi yang tersedia.
+Participants are tasked with building a machine learning model to predict the value of is_referenced, indicating whether a citation relationship actually exists based on the available information.
 
 Files:
-- Folder Paper Database: Folder yang berisi isi dokumen dalam format .txt, dengan nama file sesuai paper_id.
-- papers_metadata.csv: Berisi metadata lengkap untuk setia dokumen.
-- train.csv: Berisi pasangan dokumen dengan label apakah paper mengutip referenced_paper.
-- test.csv: Berisi pasangan dokumen tanpa label yang perlu diprediksi oleh peserta.
-- sample_submission.csv: Contoh format pengumpulan prediksi untuk data uji.
+- Folder Paper Database: Contains the full texts of documents in .txt format, with filenames corresponding to paper_id.
+- papers_metadata.csv: Contains complete metadata for each document.
+- train.csv: Contains document pairs with labels indicating whether the paper cites the referenced_paper.
+- test.csv: Contains document pairs without labels, to be predicted by participants.
+- sample_submission.csv: Sample format for submitting predictions on the test data.
 
 ## Evaluation
-Evaluasi submission diberikan dengan format .csv yang memiliki header nama kolom (lihat contoh submisi). Hasil submisi akan dinilai dengan metrik MCC (Matthews Correlation Coefficient). Sebagian hasil penilaian test dataset akan digunakan untuk membentuk public leaderboard. Hasil utuh akan diberikan pada private leaderboard setelah kompetisi berakhir.
+Submissions are evaluated using .csv files with the specified column headers (see the sample submission). The MCC (Matthews Correlation Coefficient) metric will be used to assess the model’s performance. A portion of the test dataset results will form the public leaderboard. The full results will be revealed in the private leaderboard after the competition ends.
 
 # Competition Link
 https://www.kaggle.com/competitions/gammafest25
