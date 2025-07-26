@@ -30,133 +30,132 @@ Files:
 
 ### Exploratory Data Analysis (EDA)
 
-Tahap EDA dilakukan untuk memahami struktur data, mengidentifikasi pola, dan menemukan insight awal dari dataset. Proses EDA mencakup beberapa aktivitas analisis sebagai berikut:
+The EDA phase was carried out to understand the structure of the data, identify patterns, and discover early insights from the dataset. This process included the following activities:
 
-**1. Analisis Informasi Umum Data**
-Analisis dimulai dengan menggunakan fungsi `df.info()` untuk mendapatkan ringkasan DataFrame, termasuk jumlah non-null pada setiap kolom dan tipe datanya. Proses ini membantu mengidentifikasi kolom dengan missing values dan tipe data yang perlu dikonversi.
+**1. General Data Information Analysis**
+The analysis began by using the `df.info()` function to obtain a summary of the DataFrame, including the number of non-null values in each column and their data types. This helped identify columns with missing values and those needing type conversion.
 
-**2. Eksplorasi Data Awal**
-Dilakukan pemeriksaan terhadap 5 baris pertama dataset menggunakan `df.head()` untuk memberikan gambaran awal tentang format data dan nilai-nilai yang ada dalam dataset.
+**2. Initial Data Exploration**
+The first 5 rows of the dataset were inspected using `df.head()` to gain an early understanding of the data format and values.
 
-**3. Analisis Perbedaan Tahun Publikasi**
-Dibuat kolom baru `year_difference` dengan mengurangi tahun publikasi dokumen utama dengan tahun publikasi dokumen yang direferensikan. Nilai negatif pada `year_difference` diubah menjadi -1 untuk konsistensi data.
+**3. Publication Year Difference Analysis**
+A new column 'year_difference' was created by subtracting the publication year of the main document from that of the referenced document. Negative values in 'year_difference' were set to -1 for consistency.
 
-**4. Analisis Data Gabungan**
-Dilakukan pemeriksaan informasi gabungan menggunakan `merged_df.info()` untuk melihat informasi umum setelah penggabungan data `train.csv` dengan `metadata.csv`.
+**4. Merged Data Analysis**
+A check on combined data information was conducted using `merged_df.info()` to view summary data after merging `train.csv` with `metadata.csv`.
 
-**5. Analisis Data Training**
-Pemeriksaan informasi data training asli dilakukan menggunakan `train_data.info()` sebelum digabungkan dengan metadata untuk memahami struktur data dasar.
+**5. Training Data Analysis**
+The original training data was inspected using `train_data.info()` before merging with metadata to understand its basic structure.
 
 ### Data Cleaning
 
-Tahap cleaning data berfokus pada penanganan missing values, duplikat, dan inkonsistensi data. Proses cleaning meliputi:
+The data cleaning phase focused on handling missing values, duplicates, and data inconsistencies. The process included:
 
-**1. Penghapusan Kolom Redundan**
-Kolom `publication_date` dihapus dari DataFrame karena kolom `publication_year` sudah tersedia dan fitur `year_difference` telah dibuat sebagai pengganti yang lebih informatif.
+**1. Removal of Redundant Columns**
+The 'publication_date' column was dropped from the DataFrame since 'publication_year' already exists and the 'year_difference' feature serves as a more informative alternative.
 
-**2. Pembersihan Data Penulis**
-Fungsi `clean_authors` diterapkan untuk membersihkan kolom `authors` dengan proses sebagai berikut:
-- Mengganti nilai NaN dengan string kosong
-- Mengganti titik koma (`;`) dengan koma (`,`) untuk standardisasi
-- Menghapus karakter non-alfabet/non-angka (kecuali koma dan spasi) dengan spasi
-- Menghilangkan spasi ganda dan spasi di awal/akhir string
+**2. Author Data Cleaning**
+The `clean_authors` function was applied to 'clean' the authors column by:
+- Replacing NaN with empty strings
+- Replacing semicolons (;) with commas (,) for standardization
+- Removing non-alphanumeric characters (except commas and spaces)
+- Removing double spaces and leading/trailing whitespaces
 
-**3. Pembersihan Data Teks**
-Kolom `title_paper` dan `title_referenced` dibersihkan menggunakan fungsi `clean_text` yang melakukan:
-- Konversi teks menjadi huruf kecil
-- Penghapusan karakter non-alfanumerik (kecuali koma dan spasi)
-- Penghilangan spasi berlebih untuk konsistensi format
+**3. Text Data Cleaning**
+The 'title_paper' and 'title_referenced' columns were cleaned using the clean_text function, which:
+- Converts text to lowercase
+- Removes non-alphanumeric characters (except commas and spaces)
+- Trims excess spaces for formatting consistency
 
-**4. Konversi Format Konsep**
-Kolom `concepts_paper` dan `concepts_referenced` diubah dari string yang dipisahkan titik koma menjadi list string untuk mempersiapkan proses encoding selanjutnya.
+**4. Concept Format Conversion**
+The 'concepts_paper' and 'concepts_referenced' columns were converted from semicolon-separated strings into string lists to prepare for encoding.
 
 ## Data Preprocessing
 
-Tahap preprocessing mempersiapkan data untuk pemodelan dengan melakukan feature engineering, encoding, dan scaling:
+The preprocessing stage prepares the data for modeling by conducting feature engineering, encoding, and scaling:
 
-**1. Penggabungan Data**
-Data `train.csv` digabungkan dengan `metadata.csv` menggunakan dua tahap:
-- Penggabungan pertama untuk data `paper` menggunakan `paper_id` sebagai kunci
-- Penggabungan kedua untuk data `referenced_paper` menggunakan `paper_id` sebagai kunci
-Proses ini memperkaya data training dengan metadata dari kedua dokumen yang terlibat dalam referensi.
+**1. Data Merging**
+`train.csv` was merged with `metadata.csv` in two steps:
+- First merge for the `paper` data using 'paper_id' as the key
+- Second merge for the `referenced_paper` using 'paper_id' as the key
+This process enriched the training data with metadata from both papers involved in the reference.
 
 **2. Feature Engineering**
-Beberapa fitur baru dibuat untuk meningkatkan kualitas prediksi:
+New features were created to improve prediction quality:
+- Title Similarity (title_similarity)
+  - `HashingVectorizer` was used for memory-efficient vectorization
+  - `TfidfVectorizer` was used on a subset for higher-quality embeddings
+  - Cosine similarity between main and referenced titles was calculated
 
-*Kesamaan Judul (title_similarity)*
-- Menggunakan `HashingVectorizer` untuk efisiensi memori dalam mengubah judul menjadi vektor numerik
-- Menggunakan `TfidfVectorizer` pada subset data untuk kualitas yang lebih baik
-- Menghitung kesamaan kosinus antara judul dokumen utama dan dokumen yang direferensikan
+- Concept Similarity (concept_sim)
+  - Jaccard similarity was calculated between the concept lists of the main and referenced papers
+  - A numerical score was assigned to measure topical similarity
 
-*Kesamaan Konsep (concept_sim)*
-- Menghitung kesamaan Jaccard antara list konsep dokumen utama dan dokumen yang direferensikan
-- Memberikan nilai numerik untuk mengukur kemiripan topik penelitian
+- Author Overlap (author_overlap)*
+  - Jaccard similarity was calculated between author lists of both papers
+  - Last name matching was used to handle name variations
 
-*Tumpang Tindih Penulis (author_overlap)*
-- Menghitung kesamaan Jaccard antara list penulis dokumen utama dan dokumen yang direferensikan
-- Mencocokkan nama belakang untuk menangani variasi penulisan nama penulis
+- Citations Feature
+  - `citation_ratio`: Citation ratio using `(cited_by_count_paper + 1) / (cited_by_count_referenced + 1)`
+  - `citation_diff`: Citation difference using `np.log1p(cited_by_count_paper) - np.log1p(cited_by_count_referenced)`
+  - The +1 and `np.log1p` transformations handled zero values and normalized the data
 
-*Fitur Sitasi*
-- `citation_ratio`: Rasio sitasi menggunakan formula `(cited_by_count_paper + 1) / (cited_by_count_referenced + 1)`
-- `citation_diff`: Perbedaan logaritma sitasi menggunakan `np.log1p(cited_by_count_paper) - np.log1p(cited_by_count_referenced)`
-- Penambahan +1 dan `np.log1p` digunakan untuk menangani nilai nol dan normalisasi
+- Age-Adjusted Citation Impact
+  - `years_since_pub_ref`: Years since referenced paper publication
+  - `citation_rate_ref`: Citation rate per year to measure research impact
 
-*Dampak Sitasi yang Disesuaikan Usia*
-- `years_since_pub_ref`: Menghitung jumlah tahun sejak publikasi dokumen yang direferensikan
-- `citation_rate_ref`: Tingkat sitasi per tahun untuk mengukur dampak penelitian
+**3. Scaling of Numerical Features**
+`StandardScaler` was used to normalize numerical features to a uniform scale, enhancing model performance..
 
-**3. Penskalaan Fitur Numerik**
-Penerapan `StandardScaler` untuk menormalisasi fitur numerik agar memiliki skala yang seragam dan meningkatkan performa model.
+**4. Class Imbalance Handling**
+Class balancing was performed via:
+- Oversampling the minority class (`is_referenced = 1`)
+- Undersampling the majority class (`is_referenced = 0`)
+- Merging all positive samples with a downsampled set of negative samples
 
-**4 Penanganan Ketidakseimbangan Kelas**
-Dilakukan penyeimbangan dataset melalui:
-- Oversampling pada kelas minoritas (`is_referenced = 1`)
-- Undersampling pada kelas mayoritas (`is_referenced = 0`)
-- Penggabungan semua sampel positif dengan sampel negatif yang di-downsample
-
-**5. Pembagian Dataset**
-Dataset dibagi menjadi training dan testing set menggunakan `train_test_split` untuk evaluasi model yang objektif.
+**5. Dataset Splitting**
+The dataset was split into training and testing sets using `train_test_split` to ensure objective model evaluation.
 
 ### Modeling
 
-Tahap pemodelan menggunakan berbagai algoritma machine learning dan teknik ensemble:
+The modeling stage used various machine learning algorithms and ensemble techniques:
 
-**1. Model Individu**
-Empat model dasar digunakan dalam penelitian ini:
-- `HistGradientBoostingClassifier (HGB)`: Model boosting berbasis pohon yang efisien untuk dataset besar
-- `RandomForestClassifier (RF)`: Model ensemble berbasis pohon dengan multiple decision trees
-- `XGBoost (XGB)`: Implementasi gradient boosting yang optimized dan populer
-- `Logistic Regression (LR)`: Model linear dasar untuk klasifikasi biner
+**1. Individual Models**
+Four base models were used in this study:
+- `HistGradientBoostingClassifier (HGB)`: A tree-based boosting model efficient for large datasets
+- `RandomForestClassifier (RF)`:  An ensemble model using multiple decision trees
+- `XGBoost (XGB)`: A popular and optimized gradient boosting implementation
+- `Logistic Regression (LR)`: A basic linear model for binary classification
 
-**2. Model Ensemble**
-Implementasi `VotingClassifier` dengan konfigurasi:
-- Menggunakan `voting='soft'` untuk menggabungkan prediksi probabilitas dari semua model individu
-- Optimasi bobot untuk setiap model menggunakan `GridSearchCV` berdasarkan metrik Matthews Correlation Coefficient (MCC)
-- Training model individu dalam proses Grid Search untuk menemukan kombinasi bobot optimal
-- Training ensemble akhir menggunakan bobot optimal pada seluruh data training
+**2. Ensemble Model**
+A `VotingClassifier` was implemented with:
+- `voting='soft'` to combine probability predictions from all individual models
+- Weight optimization for each model using `GridSearchCV` based on the Matthews Correlation Coefficient (MCC)
+- Training of individual models during Grid Search to find the optimal weight combination
+- Final ensemble model trained using the best weights on the full training set
 
 ## Evaluation
-Evaluasi model dilakukan menggunakan berbagai metrik klasifikasi untuk menilai performa prediksi:
+Model evaluation was done using various classification metrics to assess prediction performance:
 
-**Metrik Evaluasi**
-- `Classification Report`: Menyediakan Precision, Recall, dan F1-Score untuk setiap kelas, serta accuracy, macro avg, dan weighted avg
-- `Matthews Correlation Coefficient (MCC)`: Metrik yang seimbang untuk dataset tidak seimbang dengan nilai antara -1 (prediksi salah) dan +1 (prediksi sempurna)
+**Evaluation Metrics**
+- `Classification Report`: Provides precision, recall, and F1-score for each class, along with accuracy, macro avg, and weighted avg
+- `Matthews Correlation Coefficient (MCC)`: A balanced metric for imbalanced datasets, ranging from -1 (total misclassification) to +1 (perfect prediction)
 
-**Analisis Performa Model**
-Hasil evaluasi menunjukkan:
+**Model Performance Analysis**
+Evaluation results showed:
 - Random Forest: MCC = 0.5672
-- HistGradientBoosting: MCC = 0.5822 (performa terbaik di antara model individu)
+- HistGradientBoosting: MCC = 0.5822 (best performance among individual models)
 - Voting Classifier: MCC = 0.5793
 
-**Analisis Importansi Fitur**
-Menggunakan `feature_importances_` dari HistGradientBoostingClassifier untuk mengidentifikasi fitur paling berpengaruh:
+**Feature Importance Analysis**
+Using `feature_importances_ `from HistGradientBoostingClassifier to identify the most influential features:
 1. `primaryGenreName_freq`
 2. `downloads_encoded`
 3. `appAge`
 4. `userRatingCount`
 5. `developerCountry_freq`
 
-Fitur-fitur ini menunjukkan pengaruh signifikan terhadap hasil prediksi dan memberikan insight tentang faktor-faktor yang mempengaruhi keputusan referensi dalam penelitian.
+These features showed significant influence on prediction results and provided insight into the factors influencing citation decisions in scientific research
 
 ```
 Submissions are evaluated using .csv files with the specified column headers (see the sample submission). The MCC (Matthews Correlation Coefficient) metric will be used to assess the model’s performance. A portion of the test dataset results will form the public leaderboard. The full results will be revealed in the private leaderboard after the competition ends.
